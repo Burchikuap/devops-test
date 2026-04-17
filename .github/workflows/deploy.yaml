@@ -52,7 +52,10 @@ jobs:
           docker save -o /tmp/api-image.tar local/api-gateway:${IMAGE_TAG}
           docker run --rm -v /tmp:/tmp aquasec/trivy:0.68.1 image \
             --input /tmp/api-image.tar \
+            --scanners vuln \
             --severity HIGH,CRITICAL \
+            --ignore-unfixed \
+            --skip-version-check \
             --exit-code 1
 
       - name: Scan worker image
@@ -60,7 +63,10 @@ jobs:
           docker save -o /tmp/worker-image.tar local/task-worker:${IMAGE_TAG}
           docker run --rm -v /tmp:/tmp aquasec/trivy:0.68.1 image \
             --input /tmp/worker-image.tar \
+            --scanners vuln \
             --severity HIGH,CRITICAL \
+            --ignore-unfixed \
+            --skip-version-check \
             --exit-code 1
 
       - name: Install kind

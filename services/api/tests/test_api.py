@@ -28,7 +28,7 @@ class FakeStats:
 
 def settings() -> Settings:
     return Settings(
-        jwt_secret="test-secret",
+        jwt_secret="test-secret-0123456789abcdef012345",
         jwt_audience="tests",
         jwt_issuer="unit-tests",
     )
@@ -50,7 +50,11 @@ def test_post_task_accepts_valid_jwt() -> None:
 
     import jwt
 
-    token = jwt.encode({"sub": "tester", "aud": "tests", "iss": "unit-tests"}, "test-secret", algorithm="HS256")
+    token = jwt.encode(
+        {"sub": "tester", "aud": "tests", "iss": "unit-tests"},
+        "test-secret-0123456789abcdef012345",
+        algorithm="HS256",
+    )
     response = client.post(
         "/task",
         json={"task_id": "task-1", "payload": {"x": 1}},
@@ -73,4 +77,3 @@ def test_stats_endpoint_returns_expected_shape() -> None:
         "queue_backlog": 1,
         "worker_processed_count": 2,
     }
-
