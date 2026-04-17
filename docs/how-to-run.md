@@ -1,5 +1,7 @@
 # How To Run
 
+This document is the practical runbook for bringing the platform up locally. The steps below assume a clean `kind` cluster and local Docker image builds.
+
 ## Prerequisites
 
 - `docker`
@@ -96,7 +98,7 @@ kubectl port-forward svc/api -n devops-platform 18080:8000
 kubectl port-forward svc/kube-prometheus-stack-grafana -n monitoring 13000:80
 ```
 
-Grafana is available at `http://127.0.0.1:13000`. Default credentials come from the `kube-prometheus-stack` chart unless overridden.
+Grafana is available at `http://127.0.0.1:13000`. With the values in this repository, the default login is `admin` / `admin`.
 
 ## 9. Generate a JWT for testing
 
@@ -169,3 +171,4 @@ terraform plan \
 - The charts use built-in dev secrets for local repeatability. Replace them before any shared environment.
 - If your kind cluster has no default storage class, set `persistence.storageClass` in the stateful charts.
 - Monitoring installation depends on public Helm repos; everything else in the repository is self-contained.
+- If the API or Grafana is not reachable on `127.0.0.1`, check whether the corresponding `kubectl port-forward` process is still running.
