@@ -11,7 +11,8 @@ jobs:
   unit-tests:
     stage: test
     commands:
-      - python3 -m pytest services/api/tests services/worker/tests
+      - cd services/api && python3 -m pytest tests
+      - cd services/worker && python3 -m pytest tests
   build-images:
     stage: build
     commands:
@@ -41,4 +42,3 @@ jobs:
     stage: smoke
     commands:
       - bash infra/scripts/smoke.sh
-
