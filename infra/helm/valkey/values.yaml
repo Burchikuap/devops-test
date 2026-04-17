@@ -1,0 +1,38 @@
+image:
+  repository: valkey/valkey
+  tag: 7.2.5-alpine
+  pullPolicy: IfNotPresent
+
+exporter:
+  repository: oliver006/redis_exporter
+  tag: v1.67.0
+  pullPolicy: IfNotPresent
+
+service:
+  name: valkey
+  port: 6379
+  metricsPort: 9121
+
+auth:
+  password: change-me-valkey
+
+persistence:
+  size: 4Gi
+  storageClass: ""
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 256Mi
+  limits:
+    cpu: 1000m
+    memory: 1Gi
+
+pdb:
+  minAvailable: 1
+
+serviceMonitor:
+  enabled: true
+  labels:
+    release: kube-prometheus-stack
+

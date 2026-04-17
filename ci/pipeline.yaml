@@ -1,0 +1,44 @@
+name: devops-test-pipeline
+
+stages:
+  - test
+  - build
+  - scan
+  - deploy
+  - smoke
+
+jobs:
+  unit-tests:
+    stage: test
+    commands:
+      - python3 -m pytest services/api/tests services/worker/tests
+  build-images:
+    stage: build
+    commands:
+      - docker build -t local/api-gateway:${GIT_SHA:-dev} services/api
+      - docker build -t local/task-worker:${GIT_SHA:-dev} services/worker
+  scan-images:
+    stage: scan
+    commands:
+      - trivy image --severity HIGH,CRITICAL --exit-code 1 local/api-gateway:${GIT_SHA:-dev}
+      - trivy image --severity HIGH,CRITICAL --exit-code 1 local/task-worker:${GIT_SHA:-dev}
+  deploy-kind:
+    stage: deploy
+    commands:
+      - kind create cluster --name devops-test --image kindest/node:v1.30.0
+      - kind load docker-image local/api-gateway:${GIT_SHA:-dev} --name devops-test
+      - kind load docker-image local/task-worker:${GIT_SHA:-dev} --name devops-test
+      - helm upgrade --install platform infra/helm/platform --create-namespace --namespace devops-platform
+      - helm upgrade --install rabbitmq infra/helm/rabbitmq --namespace devops-platform
+      - helm upgrade --install valkey infra/helm/valkey --namespace devops-platform
+      - helm upgrade --install api infra/helm/api --namespace devops-platform --set image.tag=${GIT_SHA:-dev}
+      - helm upgrade --install worker infra/helm/worker --namespace devops-platform --set image.tag=${GIT_SHA:-dev}
+      - kubectl rollout status statefulset/rabbitmq -n devops-platform --timeout=180s
+      - kubectl rollout status statefulset/valkey -n devops-platform --timeout=180s
+      - kubectl rollout status deployment/api -n devops-platform --timeout=180s
+      - kubectl rollout status deployment/worker -n devops-platform --timeout=180s
+  smoke-test:
+    stage: smoke
+    commands:
+      - bash infra/scripts/smoke.sh
+

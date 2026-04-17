@@ -1,0 +1,10 @@
+loki:
+  auth_enabled: false
+singleBinary:
+  replicas: 1
+gateway:
+  enabled: false
+monitoring:
+  serviceMonitor:
+    enabled: true
+

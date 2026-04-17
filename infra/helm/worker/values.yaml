@@ -1,0 +1,53 @@
+nameOverride: worker
+
+image:
+  repository: local/task-worker
+  tag: dev
+  pullPolicy: IfNotPresent
+
+replicaCount: 2
+
+service:
+  name: worker
+  metricsPort: 9100
+
+config:
+  serviceName: worker
+  rabbitmqHost: rabbitmq
+  rabbitmqPort: "5672"
+  rabbitmqQueue: task-queue
+  valkeyHost: valkey
+  valkeyPort: "6379"
+  resultKeyPrefix: task-result
+  processedCounterKey: worker:processed_total
+  resultTtlSeconds: "86400"
+  prefetchCount: "10"
+  pollIntervalSeconds: "2"
+  metricsPort: "9100"
+
+secrets:
+  rabbitmqUsername: app
+  rabbitmqPassword: change-me-rabbitmq
+  valkeyPassword: change-me-valkey
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 128Mi
+  limits:
+    cpu: 500m
+    memory: 256Mi
+
+hpa:
+  minReplicas: 1
+  maxReplicas: 5
+  cpuUtilization: 70
+
+pdb:
+  minAvailable: 1
+
+serviceMonitor:
+  enabled: true
+  labels:
+    release: kube-prometheus-stack
+

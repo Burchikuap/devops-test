@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: {{ .Values.monitoringNamespace }}
+  labels:
+    name: {{ .Values.monitoringNamespace }}
+    app.kubernetes.io/part-of: devops-test

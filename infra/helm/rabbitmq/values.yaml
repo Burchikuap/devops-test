@@ -1,0 +1,35 @@
+image:
+  repository: rabbitmq
+  tag: 3.13-management-alpine
+  pullPolicy: IfNotPresent
+
+service:
+  name: rabbitmq
+  amqpPort: 5672
+  managementPort: 15672
+  metricsPort: 15692
+
+auth:
+  username: app
+  password: change-me-rabbitmq
+
+persistence:
+  size: 4Gi
+  storageClass: ""
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 256Mi
+  limits:
+    cpu: 1000m
+    memory: 1Gi
+
+pdb:
+  minAvailable: 1
+
+serviceMonitor:
+  enabled: true
+  labels:
+    release: kube-prometheus-stack
+

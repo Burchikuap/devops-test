@@ -1,0 +1,7 @@
+apiVersion: v2
+name: valkey
+description: Valkey state store for task results and counters.
+type: application
+version: 0.1.0
+appVersion: "7.2"
+
