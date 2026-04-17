@@ -47,7 +47,7 @@ I ran the platform locally in `kind` and verified the following:
 
 ## Quick start
 
-The full runbook is in [docs/how-to-run.md](/Users/andriiishchenko/Sites/devops-test/docs/how-to-run.md), but the shortest path is:
+The full runbook is in [docs/how-to-run.md](docs/how-to-run.md), but the shortest path is:
 
 ```bash
 kind create cluster --name devops-test --image kindest/node:v1.30.0
@@ -66,10 +66,10 @@ helm upgrade --install worker infra/helm/worker --namespace devops-platform --se
 
 ## Main documents
 
-- Architecture overview: [architecture/design.md](/Users/andriiishchenko/Sites/devops-test/architecture/design.md)
-- Design choices and tradeoffs: [docs/decisions.md](/Users/andriiishchenko/Sites/devops-test/docs/decisions.md)
-- Local run instructions: [docs/how-to-run.md](/Users/andriiishchenko/Sites/devops-test/docs/how-to-run.md)
-- Operational troubleshooting: [docs/troubleshooting.md](/Users/andriiishchenko/Sites/devops-test/docs/troubleshooting.md)
+- Architecture overview: [architecture/design.md](architecture/design.md)
+- Design choices and tradeoffs: [docs/decisions.md](docs/decisions.md)
+- Local run instructions: [docs/how-to-run.md](docs/how-to-run.md)
+- Operational troubleshooting: [docs/troubleshooting.md](docs/troubleshooting.md)
 
 ## Repository layout
 
